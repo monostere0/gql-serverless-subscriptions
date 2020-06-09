@@ -1,0 +1,30 @@
+service: online-feed-backend-for-frontend
+provider:
+  name: aws
+  region: eu-central-1
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+  logs:
+    restApi: true
+
+functions:
+  graphql:
+    handler: src/server.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+          # authorizer:
+          #   type: cognito_user_pools
+          #   authorizerId:
+          #     Ref: ApiGatewayAuthorizer
+      - http:
+          path: graphql
+          method: get
+          cors: true
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-pseudo-parameters

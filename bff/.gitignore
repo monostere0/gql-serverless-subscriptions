@@ -1,0 +1,5 @@
+.build
+.serverless
+.webpack
+node_modules
+.vscode
