@@ -19,12 +19,14 @@
     "apollo-datasource-rest": "^0.9.2",
     "apollo-graphql": "^0.4.5",
     "apollo-server-lambda": "^2.14.3",
+    "aws-sdk": "^2.693.0",
     "graphql": "^15.1.0",
     "graphql-tools": "^6.0.9",
     "lambda-log": "^2.4.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.53",
     "@types/graphql": "^14.5.0",
     "@types/jest": "^26.0.0",
     "@types/lambda-log": "^2.2.0",

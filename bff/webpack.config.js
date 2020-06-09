@@ -39,6 +39,8 @@ module.exports = {
     ],
   },
   resolve: {
+    // Make sure to have .mjs before .ts and .js, otherwise serverless-webpack will complain
+    // https://github.com/graphql/graphql-js/issues/1272#issuecomment-377384574
     extensions: ['.tsx', '.mjs', '.ts', '.js', '.webpack.js', '.web.js', '.json'],
   },
   devtool: 'source-map',

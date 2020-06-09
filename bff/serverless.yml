@@ -7,10 +7,29 @@ provider:
   logs:
     restApi: true
 
+  environment:
+    SQS_QUEUE_URL:
+      Ref: FeedQueue
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - { Fn::GetAtt: ["FeedPostsTable", "Arn"] }
+        - { Fn::GetAtt: ["UsersTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - sqs:*
+      Resource:
+        - { Fn::GetAtt: ["FeedQueue", "Arn"] }
+
 functions:
   graphql:
     handler: src/server.graphqlHandler
     events:
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/graphql"
       - http:
           path: graphql
           method: post
@@ -23,8 +42,65 @@ functions:
           path: graphql
           method: get
           cors: true
+  feed-stream-handler:
+    handler: src/streamHandler.handler
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 10
+          enabled: true
+          arn: { Fn::GetAtt: ["FeedPostsTable", "StreamArn"] }
+      - cloudwatchLog:
+          logGroup: "/aws/lambda/feed-stream-handler"
 
 plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-pseudo-parameters
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: online-feed-users
+    FeedPostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        TableName: online-feed-posts
+    FeedQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: online-feed-queue
+    LogGroupStreamHandler:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: "/aws/lambda/feed-stream-handler"
+    LogGroupGraphQL:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: "/aws/lambda/graphql"
