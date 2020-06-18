@@ -23,17 +23,20 @@ export default function App() {
   const { error, data, loading } = useSubscription(POST_SUBSCRIPTION, { shouldResubscribe: true });
   const [createPost, mutationData] = useMutation(POST_MUTATION);
 
+  console.log(mutationData);
+  console.log('subscription called', data);
+
   return (
     <div className="App">
       <div>
         <button onClick={() => createPost()}>Generate random message</button>
       </div>
       <span>
-        mutation {!mutationData.loading && mutationData.data}
+        mutation result: {!mutationData.loading && mutationData.data && mutationData.data.createPost.title}
       </span>
       <br />
       <span>
-        subscription {!loading && data && data.title}
+        subscription result: {!loading && data && data.title}
       </span>
       <h1>Subscriptions demo</h1>
     </div>
