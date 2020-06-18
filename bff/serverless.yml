@@ -52,10 +52,6 @@ functions:
   feed-stream-handler:
     handler: src/server.graphqlDynamoStreamHandler
     events:
-      - http:
-          path: /
-          method: any
-          cors: true
       - stream:
           type: dynamodb
           enabled: true

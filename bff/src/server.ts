@@ -65,7 +65,7 @@ const serverInstance = new Server({
 
 const graphqlHttpHandler = serverInstance.createHttpHandler({ cors: { origin: '*', credentials: true } });
 const graphqlWebSocketHandler = serverInstance.createWebSocketHandler();
-const graphqlDynamoStreamHandler = serverInstance.createHandler({ cors: { origin: '*', credentials: true } });
+const graphqlDynamoStreamHandler = serverInstance.createEventHandler();
 
 export {
   graphqlHttpHandler,

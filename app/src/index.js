@@ -10,7 +10,6 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ApolloProvider } from '@apollo/react-hooks';
 import App from './App';
 
-// @ts-ignore
 const wsLink = new WebSocketLink({
   uri: 'wss://ja5pp580nk.execute-api.eu-central-1.amazonaws.com/dev',
   options: {
