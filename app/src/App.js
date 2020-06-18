@@ -20,13 +20,8 @@ const POST_MUTATION = gql`
 `
 
 export default function App() {
-  const { error, data, loading } = useSubscription(POST_SUBSCRIPTION, {
-    shouldResubscribe: true,
-    onSubscriptionData: data => console.log(data)
-  });
-  const [createPost] = useMutation(POST_MUTATION);
-
-  console.log('sub', error, data, loading);
+  const { error, data, loading } = useSubscription(POST_SUBSCRIPTION, { shouldResubscribe: true });
+  const [createPost, mutationData] = useMutation(POST_MUTATION);
 
   return (
     <div className="App">
@@ -34,7 +29,11 @@ export default function App() {
         <button onClick={() => createPost()}>Generate random message</button>
       </div>
       <span>
-        {!loading && data && data.title}
+        mutation {!mutationData.loading && mutationData.data}
+      </span>
+      <br />
+      <span>
+        subscription {!loading && data && data.title}
       </span>
       <h1>Subscriptions demo</h1>
     </div>
