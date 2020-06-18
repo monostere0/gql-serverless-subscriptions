@@ -3,7 +3,6 @@ import { DynamoDBStreamEvent, DynamoDBStreamHandler, DynamoDBRecord } from 'aws-
 import log from 'lambda-log';
 
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-
 const dynamoUnmarshall = AWS.DynamoDB.Converter.unmarshall;
 
 function removeEventData(body: any) {
