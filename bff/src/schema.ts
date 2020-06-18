@@ -3,20 +3,19 @@ export default /* GraphQL */ `
     hello: String
   }
 
-  # type Mutation {
-  #   createPost(userId: ID!, title: String, message: String): Post
-  #   createUser(name: String): User
-  # }
+  type Mutation {
+    createPost: Post
+  }
 
   type Subscription {
     postBroadcast: Post
   }
 
   type Post {
-    id: ID!
-    # title: String
+    # id: ID!
+    title: String
     # added: String
-    # message: String
+    message: String
     # author: User!
   }
 

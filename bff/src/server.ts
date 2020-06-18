@@ -7,20 +7,26 @@ import {
 } from 'aws-lambda-graphql';
 import pubSubService, { PUBSUB_TOPIC } from './pubSubService';
 import schema from './schema';
+import faker from 'faker';
 
 const resolvers = {
   Query: {
     // eslint-disable-next-line
     hello: () => 'Hello!',
-    // // eslint-disable-next-line
-    // users: () => { },
   },
-  // Mutation: {
-  //   // eslint-disable-next-line
-  //   createPost: () => { },
-  //   // eslint-disable-next-line
-  //   createUser: () => { },
-  // },
+  Mutation: {
+    // eslint-disable-next-line
+    async createPost(rootValue: any, args: any) {
+      const payload = {
+        title: faker.random.words(3),
+        message: faker.random.words(10),
+      };
+
+      await pubSubService.publish(PUBSUB_TOPIC, payload);
+
+      return payload;
+    },
+  },
   Subscription: {
     postBroadcast: {
       resolve: (rootValue: Record<string, unknown>) => {

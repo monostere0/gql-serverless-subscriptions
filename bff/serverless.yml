@@ -40,12 +40,6 @@ functions:
           path: /
           method: any
           cors: true
-          # authorizer:
-          #   type: cognito_user_pools
-          #   authorizerId:
-          #     Ref: ApiGatewayAuthorizer
-      # - sqs:
-      #     arn: { Fn::GetAtt: ["FeedQueue", "Arn"] }
   subscriptions-handler:
     handler: src/server.graphqlWebSocketHandler
     events:
